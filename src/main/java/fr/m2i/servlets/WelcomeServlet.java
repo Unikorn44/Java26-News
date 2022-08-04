@@ -1,6 +1,7 @@
 package fr.m2i.servlets;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -11,7 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import fr.m2i.models.Actor;
+import fr.m2i.models.News;
 
 /**
  * Servlet implementation class WelcomeServlet
@@ -35,8 +36,17 @@ public class WelcomeServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		request.setAttribute("actor", this.jpaExemple());
+		EntityManagerFactory factory = Persistence.createEntityManagerFactory("UnityPersist");
+		EntityManager em = factory.createEntityManager();
 		
+		//Récupération liste news
+		//List<News> newsListRecup = em.createNamedQuery("selectAll", News.class).getResultList();
+		List<News> newsListRecup = em.createNamedQuery("selectAllInvert", News.class).setMaxResults(5).getResultList();
+		
+		//Préparation élement pour renvoi via request
+		request.setAttribute("newsListRecup", newsListRecup);		
+		
+		em.close();
 		
 		this.getServletContext().getRequestDispatcher(PAGE).forward(request, response);
 	}
@@ -49,54 +59,6 @@ public class WelcomeServlet extends HttpServlet {
 		doGet(request, response);
 	}
 	
-	//méthode pour retrouver UN acteur via ccès direct des données
-	protected Actor jpaExemple() {
-		//Création EntityFactoryManager pour les lier tous
-		EntityManagerFactory factory = Persistence.createEntityManagerFactory("UnityPersist");
-		//Attention pas d'autoclosable
-		EntityManager em = factory.createEntityManager();
-		
-		
-		/*
-		    find -- attache l'entité à EM + détecte toutes les modif° effectuées
-			persist -- ajout d'une nouvelle entité dans la BDD
-			merge -- Appliquer des modifications en BDD pour une entité NON managée (exp: new actor)
-			detach -- sort du contexte d esurveillance / zone de responsabilité de l'EM
-			refresh
-			remove -- supprime de la BDD
-		 */
-		//Présence du EM.FIND => surveillance par EM
-		Actor actor = em.find(Actor.class, 1); //-- attache l'entité à EM
-		//em.persist(nouvel actor)
-		//em.remove(un actor)
-		//em.refresh(entity) -- pour rafraichir avec la data en bdd
-		//em.detach(entity) -- DETACHE du contexte de responsabilité de l'EM
-		//em.flush() ---- Attention ! OBLIGE le EM à METTRE A JOUR la BDD (sans vérifications)
-		
-		 
-		
-		/*
-		 * Transaction
-		 * 
-		 * em.getTransaction().begin()
-		 * boolean transcat = false;
-		 * 
-		 * try{
-		 * 
-		 * }
-		 * finally{
-		 * 	if(transac)
-		 * 		em.getTransaction().commit();
-		 * 	else
-		 * 		em.getTransaction().rollback();
-		 * 
-		 * }
-		 */
-		
-		
-		em.close();
-		
-		return actor;
-	}
-
+	
+	
 }

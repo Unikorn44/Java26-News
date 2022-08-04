@@ -11,9 +11,20 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>Accueil</title>
 </head>
 <body>
-<p>${actor.last_name}</p>
+	<jsp:include page="included/_header.jsp"/>
+
+	<div id="list">
+		<c:forEach var="element" items="${ newsListRecup }">
+			<c:out value="${element.dateArticle}"/>
+			<c:out value="${element.titre}"/>
+			<c:out value="${element.description}"/>
+ 			<p>--</p>
+		</c:forEach>
+	</div>
+	
+	<jsp:include page="included/_footer.jsp"/>
 </body>
 </html>
