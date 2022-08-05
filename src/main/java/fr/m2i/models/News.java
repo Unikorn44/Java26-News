@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -15,11 +17,14 @@ import javax.persistence.Table;
 @Entity
 @Table(name="newstable")
 @NamedQueries({
-	@NamedQuery(name="selectAll", query="select n from News n"),
-	@NamedQuery(name="selectById", query="select n from News n where n.id = :id"),
-	@NamedQuery(name="deleteById", query="delete from News n where n.id = :id"),
+	@NamedQuery(name="selectAll", query="SELECT n FROM News n"),
+	@NamedQuery(name="selectById", query="SELECT n FROM News n WHERE n.id = :id"),
+	@NamedQuery(name="deleteById", query="DELETE FROM News n WHERE n.id = :id"),
 	@NamedQuery(name="selectAllInvert", query="SELECT n FROM News n ORDER BY n.id DESC"),
 })
+//@NamedNativeQueries({
+  //  @NamedNativeQuery(name="addNews", query="INSERT INTO newstable (dateArticle, titre, description) VALUES(:dateArticle, :titre, :description)",resultClass = News.class )
+//})
 public class News {
 	
 	@Id

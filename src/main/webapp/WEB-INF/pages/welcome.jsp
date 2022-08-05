@@ -15,6 +15,21 @@
 </head>
 <body>
 	<jsp:include page="included/_header.jsp"/>
+	
+	<p>
+		<c:out value="${ user.username }"/>
+	</p>
+	<p>
+		<c:out value="${ auth }"/>
+	</p>
+	
+	<c:choose >
+		<c:when test="${ sessionScope['auth']}">
+			<div class="welcome">
+				<a class="logout" href="<c:url value="/login?logoff=true"/>">se déconnecter</a>
+			</div>
+		</c:when>
+	</c:choose>
 
 	<div id="list">
 		<c:forEach var="element" items="${ newsListRecup }">

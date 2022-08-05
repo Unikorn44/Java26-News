@@ -22,7 +22,16 @@
 			</li>	
 			<li>
 				<a href="<c:url value='/login' />"> Login </a>			
-			</li>	
+			</li>
+			<li>
+				<c:choose >
+					<c:when test="${ sessionScope['auth']}">
+						<div class="welcome">
+							<a href="<c:url value="/admin"/>">Admin</a>
+						</div>
+					</c:when>
+				</c:choose>
+			</li>
 		</ul>
 	</nav>
 	
